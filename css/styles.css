@@ -4,18 +4,20 @@ body {
   }
   
 .container {
-    text-align: center;
+    width: 95%;    
     margin: 50px;
-    font-size: 3em;
+    font-size: 2em; 
+    text-align: center;   
   }
   
 label {
-    font-weight: bold;    
-  }
+    font-weight: bold;       
+}
   
 select {
     padding: 8px; /* 調整選單的內邊距 */    
     width: 200px; /* 調整選單的寬度 */
+    font-size: 1em;
 }
 
 
