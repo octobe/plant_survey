@@ -2,14 +2,13 @@
 const plantSelector = document.getElementById('plantSelector');
 let data; // 將 data 宣告在更高的範圍
 
-// 使用 fetch() 函式獲取 CSV 檔案的資料
-fetch('大肚山植調.csv')
-  .then(response => response.text())
-  .then(csvData => {
-    // 將 CSV 轉換為物件陣列
+// 使用 async/await 進行非同步載入
+async function fetchData() {
+  try {
+    const response = await fetch('大肚山植調.csv');
+    const csvData = await response.text();
     data = csvToObjects(csvData);
 
-    // 用 Set 來確保唯一值
     const uniquePlantNumbers = new Set();
 
     // 將植物編號和植物名稱的選項動態生成到下拉選單
@@ -32,7 +31,10 @@ fetch('大肚山植調.csv')
 
     // 在此處添加代碼以初始化折線圖
     initChart();
-  });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
 
 // 加載選中植物的資料並顯示折線圖
 function loadData() {
@@ -131,3 +133,6 @@ function initChart() {
   // 這裡的代碼可以呼叫 loadData() 以顯示默認植物的折線圖
   loadData();
 }
+
+// 執行非同步載入
+fetchData();
