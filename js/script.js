@@ -49,12 +49,13 @@ function loadData() {
   chartContainer.innerHTML = '';
 
   // 準備折線圖的資料
-  const labels = selectedPlantData.map(item => new Date(item['日期'])); // 將日期轉換為 JavaScript Date 對象
+  const labels = selectedPlantData.map(item => formatDate(item['日期'])); // 使用 formatDate 函數轉換日期格式
   const leafScores = selectedPlantData.map(item => parseFloat(item['葉子分數']));
   const flowerScores = selectedPlantData.map(item => parseFloat(item['花的分數']));
   const fruitScores = selectedPlantData.map(item => parseFloat(item['果實分數']));
 
   // 檢查 leafScores、flowerScores 和 fruitScores 的值
+  console.log('Date:', labels);
   console.log('Leaf Scores:', leafScores);
   console.log('Flower Scores:', flowerScores);
   console.log('Fruit Scores:', fruitScores);
@@ -100,6 +101,9 @@ function loadData() {
           position: 'bottom',
           time: {
             unit: 'day',
+            displayFormats: {
+              day: 'YYYY/MM/DD', // 設置日期格式
+            },
           },
         }],
       },
@@ -134,6 +138,15 @@ function csvToObjects(csv) {
 function initChart() {
   // 這裡可以添加代碼以初始化折線圖，例如顯示默認的植物資料
   // 這裡的代碼可以呼叫 loadData() 以顯示默認植物的折線圖
+}
+
+// 將日期格式化為 'YYYY/MM/DD'
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}/${month}/${day}`;
 }
 
 // 執行非同步載入
