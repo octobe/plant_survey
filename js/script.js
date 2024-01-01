@@ -31,6 +31,9 @@ async function fetchData() {
 
     // 在此處添加代碼以初始化折線圖
     initChart();
+
+    // 選單內容預設不選擇任何項目
+    plantSelector.selectedIndex = -1;
   } catch (error) {
     console.error('Error fetching data:', error);
   }
@@ -131,7 +134,6 @@ function csvToObjects(csv) {
 function initChart() {
   // 這裡可以添加代碼以初始化折線圖，例如顯示默認的植物資料
   // 這裡的代碼可以呼叫 loadData() 以顯示默認植物的折線圖
-  loadData();
 }
 
 // 執行非同步載入
