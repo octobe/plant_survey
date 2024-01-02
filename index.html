@@ -10,10 +10,16 @@
 <body>
 
 <div class="container">
-  <label for="plantSelector">選擇植物：</label>
-  <select id="plantSelector" onchange="loadData()"></select>
-  <div id="result"></div>
-  <div id="chartContainer" style="width: 80%; height: 400px;"></div>
+  <div class="chart-container">
+    <label for="plantSelector">選擇植物：</label>
+    <select id="plantSelector" onchange="loadData('chart1')"></select>
+    <div id="result1"></div>
+    <div id="chartContainer1" class="chart"></div>
+  </div>
+
+  <!-- Additional dropdowns and charts will be dynamically added here -->
+
+  <button onclick="addNewChart()">新增圖表</button>
 </div>
 
 <script src="js/script.js"></script>

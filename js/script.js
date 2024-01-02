@@ -1,76 +1,106 @@
-// 將植物編號和植物名稱的下拉選單元素
-const plantSelector = document.getElementById('plantSelector');
-let data; // 將 data 宣告在更高的範圍
+const container = document.querySelector('.container');
+let chartCount = 1; // Initial chart count
+let data;
 
-// 使用 async/await 進行非同步載入
 async function fetchData() {
   try {
     const response = await fetch('大肚山植調.csv');
     const csvData = await response.text();
     data = csvToObjects(csvData);
 
-    const uniquePlantNumbers = new Set();
+    // Populate the initial dropdown with data
+    const initialPlantSelector = document.getElementById('plantSelector');
+    initialPlantSelector.id = 'plantSelector1';  // Add ID to the initial dropdown
+    initialPlantSelector.addEventListener('change', () => loadData('chart1'));  // Ensure initial dropdown triggers loadData
+    populateDropdown(initialPlantSelector);
 
-    // 將植物編號和植物名稱的選項動態生成到下拉選單
-    data.forEach(item => {
-      const plantNumber = item['植物編號'];
-      const plantName = item['植物名稱'];
-
-      // 如果植物編號和植物名稱都存在，才將其添加到選單
-      if (plantNumber !== undefined && plantName !== undefined) {
-        if (!uniquePlantNumbers.has(plantNumber)) {
-          uniquePlantNumbers.add(plantNumber);
-
-          const option = document.createElement('option');
-          option.value = plantNumber;
-          option.text = `${plantNumber} - ${plantName}`;
-          plantSelector.appendChild(option);
-        }
-      }
-    });
-
-    // 在此處添加代碼以初始化折線圖
-    initChart();
-
-    // 選單內容預設不選擇任何項目
-    plantSelector.selectedIndex = -1;
+    // Initialize the chart for the first dropdown
+    loadData('chart1');
   } catch (error) {
     console.error('Error fetching data:', error);
   }
 }
 
-// 加載選中植物的資料並顯示折線圖
-function loadData() {
-  const selectedPlantNumber = plantSelector.value;
+function addNewChart() {
+  const newChartCount = chartCount + 1;
+  const newChartContainer = document.createElement('div');
+  newChartContainer.classList.add('chart-container');
+
+  const newPlantSelector = document.createElement('select');
+  newPlantSelector.id = `plantSelector${newChartCount}`;
+  newPlantSelector.addEventListener('change', () => loadData(`chart${newChartCount}`));
+
+  const newResultDiv = document.createElement('div');
+  newResultDiv.id = `result${newChartCount}`;
+
+  const newChartDiv = document.createElement('div');
+  newChartDiv.id = `chartContainer${newChartCount}`;
+  newChartDiv.classList.add('chart');
+
+  newChartContainer.appendChild(createLabel(`選擇植物：`, newPlantSelector));
+  newChartContainer.appendChild(newResultDiv);
+  newChartContainer.appendChild(newChartDiv);
+
+  container.insertBefore(newChartContainer, container.lastElementChild);
+
+  // Update chart count for the next iteration
+  chartCount++;
+
+  // Populate the new dropdown with data
+  populateDropdown(newPlantSelector);
+
+  // Initialize the chart for the new dropdown
+  loadData(`chart${newChartCount}`);
+}
+
+function createLabel(text, target) {
+  const label = document.createElement('label');
+  label.textContent = text;
+  label.appendChild(target);
+  return label;
+}
+
+function populateDropdown(selector) {
+  const uniquePlantNumbers = new Set();
+
+  data.forEach(item => {
+    const plantNumber = item['植物編號'];
+    const plantName = item['植物名稱'];
+
+    if (plantNumber !== undefined && plantName !== undefined) {
+      if (!uniquePlantNumbers.has(plantNumber)) {
+        uniquePlantNumbers.add(plantNumber);
+
+        const option = document.createElement('option');
+        option.value = plantNumber;
+        option.text = `${plantNumber} - ${plantName}`;
+        selector.appendChild(option);
+      }
+    }
+  });
+}
+
+function loadData(chartId) {
+  const selectedPlantNumber = getSelectedPlantNumber(chartId);
   const selectedPlantData = data.filter(item => item['植物編號'] === selectedPlantNumber);
 
-  // 清空先前的折線圖
-  const chartContainer = document.getElementById('chartContainer');
+  const chartContainer = document.getElementById(`chartContainer${chartId.charAt(chartId.length - 1)}`);
   chartContainer.innerHTML = '';
 
-  // 準備折線圖的資料
   const labels = selectedPlantData.map(item => {
     const date = new Date(item['日期']);
     const formattedDate = formatDate(date);
-    const solarTerm = item['節氣']; // 假設節氣的欄位名稱為 '節氣'
+    const solarTerm = item['節氣'];
     return `${formattedDate} - ${solarTerm}`;
   });
   const leafScores = selectedPlantData.map(item => parseFloat(item['葉子分數']));
   const flowerScores = selectedPlantData.map(item => parseFloat(item['花的分數']));
   const fruitScores = selectedPlantData.map(item => parseFloat(item['果實分數']));
 
-  // 檢查 leafScores、flowerScores 和 fruitScores 的值
-  console.log('Date:', labels);
-  console.log('Leaf Scores:', leafScores);
-  console.log('Flower Scores:', flowerScores);
-  console.log('Fruit Scores:', fruitScores);
-
-  // 創建折線圖的 canvas 元素
   const canvas = document.createElement('canvas');
-  canvas.id = 'chart'; // 為 canvas 添加 ID
+  canvas.id = `chart${chartId.charAt(chartId.length - 1)}`;
   chartContainer.appendChild(canvas);
 
-  // 使用 Chart.js 創建折線圖
   const ctx = canvas.getContext('2d');
   new Chart(ctx, {
     type: 'line',
@@ -107,7 +137,7 @@ function loadData() {
           time: {
             unit: 'day',
             displayFormats: {
-              day: 'YYYY/MM/DD', // 設置日期格式
+              day: 'YYYY/MM/DD',
             },
           },
         }],
@@ -116,9 +146,12 @@ function loadData() {
   });
 }
 
-// 將 CSV 轉換為物件陣列的函式
+function getSelectedPlantNumber(chartId) {
+  const selector = document.getElementById(`plantSelector${chartId.charAt(chartId.length - 1)}`);
+  return selector.value;
+}
+
 function csvToObjects(csv) {
-  // 替換所有的 CR LF（回車符 + 換行符）為 LF（換行符）
   csv = csv.replace(/\r\n/g, '\n');
 
   const lines = csv.split('\n');
@@ -139,7 +172,6 @@ function csvToObjects(csv) {
   return result;
 }
 
-// 日期格式化函數
 function formatDate(date) {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -147,11 +179,5 @@ function formatDate(date) {
   return `${year}/${month}/${day}`;
 }
 
-// 初始化折線圖
-function initChart() {
-  // 這裡可以添加代碼以初始化折線圖，例如顯示默認的植物資料
-  // 這裡的代碼可以呼叫 loadData() 以顯示默認植物的折線圖
-}
-
-// 執行非同步載入
+// Call fetchData to initialize the existing chart
 fetchData();
