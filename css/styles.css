@@ -3,17 +3,10 @@ body {
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 95%;
   margin: 50px;
   font-size: 2em;
-}
-
-.chart-container {
-  width: 80%;
-  margin-bottom: 20px;
+  text-align: center;
 }
 
 label {
@@ -27,11 +20,17 @@ select {
 }
 
 .chart {
-  width: 100%;
+  width: 80%;
   height: 400px;
+}
+
+.chart-container {
+  margin-top: 20px;
 }
 
 button {
   margin-top: 20px;
+  padding: 10px;
   font-size: 1em;
 }
+

@@ -1,5 +1,5 @@
 const container = document.querySelector('.container');
-let chartCount = 1; // Initial chart count
+let chartCount = 1;
 let data;
 
 async function fetchData() {
@@ -8,13 +8,16 @@ async function fetchData() {
     const csvData = await response.text();
     data = csvToObjects(csvData);
 
-    // Populate the initial dropdown with data
     const initialPlantSelector = document.getElementById('plantSelector');
-    initialPlantSelector.id = 'plantSelector1';  // Add ID to the initial dropdown
-    initialPlantSelector.addEventListener('change', () => loadData('chart1'));  // Ensure initial dropdown triggers loadData
+    initialPlantSelector.id = 'plantSelector1';
+    initialPlantSelector.addEventListener('change', () => loadData('chart1'));
     populateDropdown(initialPlantSelector);
 
-    // Initialize the chart for the first dropdown
+    const initialYearSelector = document.getElementById('yearSelector1');
+    initialYearSelector.addEventListener('change', () => loadData('chart1'));
+    const uniqueYears = getUniqueYears();    
+    populateYearDropdown(initialYearSelector, uniqueYears);
+
     loadData('chart1');
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -29,6 +32,13 @@ function addNewChart() {
   const newPlantSelector = document.createElement('select');
   newPlantSelector.id = `plantSelector${newChartCount}`;
   newPlantSelector.addEventListener('change', () => loadData(`chart${newChartCount}`));
+  populateDropdown(newPlantSelector);
+
+  const newYearSelector = document.createElement('select');
+  newYearSelector.id = `yearSelector${newChartCount}`;
+  newYearSelector.addEventListener('change', () => loadData(`chart${newChartCount}`));
+  const uniqueYears = getUniqueYears();
+  populateYearDropdown(newYearSelector, uniqueYears);
 
   const newResultDiv = document.createElement('div');
   newResultDiv.id = `result${newChartCount}`;
@@ -38,18 +48,14 @@ function addNewChart() {
   newChartDiv.classList.add('chart');
 
   newChartContainer.appendChild(createLabel(`選擇植物：`, newPlantSelector));
+  newChartContainer.appendChild(createLabel(`選擇年份：`, newYearSelector));
   newChartContainer.appendChild(newResultDiv);
   newChartContainer.appendChild(newChartDiv);
 
   container.insertBefore(newChartContainer, container.lastElementChild);
 
-  // Update chart count for the next iteration
   chartCount++;
 
-  // Populate the new dropdown with data
-  populateDropdown(newPlantSelector);
-
-  // Initialize the chart for the new dropdown
   loadData(`chart${newChartCount}`);
 }
 
@@ -80,22 +86,48 @@ function populateDropdown(selector) {
   });
 }
 
+function getUniqueYears() {
+  const uniqueYears = new Set();
+  data.forEach(item => {
+    const date = new Date(item['日期']);
+    if (!isNaN(date.getFullYear())) {  // Check if the year is a valid number
+      uniqueYears.add(date.getFullYear());
+    }
+  });
+  return Array.from(uniqueYears);
+}
+
+
+function populateYearDropdown(selector, years) {
+  years.forEach(year => {
+    const option = document.createElement('option');
+    option.value = year;
+    option.text = year.toString();  // 將年份轉換為字串形式
+    selector.appendChild(option);
+  });
+}
+
 function loadData(chartId) {
   const selectedPlantNumber = getSelectedPlantNumber(chartId);
+  const selectedYear = getSelectedYear(chartId);
   const selectedPlantData = data.filter(item => item['植物編號'] === selectedPlantNumber);
+  const filteredPlantData = selectedPlantData.filter(item => {
+    const date = new Date(item['日期']);
+    return date.getFullYear() == selectedYear;
+  });
 
   const chartContainer = document.getElementById(`chartContainer${chartId.charAt(chartId.length - 1)}`);
   chartContainer.innerHTML = '';
 
-  const labels = selectedPlantData.map(item => {
+  const labels = filteredPlantData.map(item => {
     const date = new Date(item['日期']);
     const formattedDate = formatDate(date);
     const solarTerm = item['節氣'];
     return `${formattedDate} - ${solarTerm}`;
   });
-  const leafScores = selectedPlantData.map(item => parseFloat(item['葉子分數']));
-  const flowerScores = selectedPlantData.map(item => parseFloat(item['花的分數']));
-  const fruitScores = selectedPlantData.map(item => parseFloat(item['果實分數']));
+  const leafScores = filteredPlantData.map(item => parseFloat(item['葉子分數']));
+  const flowerScores = filteredPlantData.map(item => parseFloat(item['花的分數']));
+  const fruitScores = filteredPlantData.map(item => parseFloat(item['果實分數']));
 
   const canvas = document.createElement('canvas');
   canvas.id = `chart${chartId.charAt(chartId.length - 1)}`;
@@ -151,6 +183,11 @@ function getSelectedPlantNumber(chartId) {
   return selector.value;
 }
 
+function getSelectedYear(chartId) {
+  const selector = document.getElementById(`yearSelector${chartId.charAt(chartId.length - 1)}`);
+  return parseInt(selector.value);
+}
+
 function csvToObjects(csv) {
   csv = csv.replace(/\r\n/g, '\n');
 
@@ -178,6 +215,7 @@ function formatDate(date) {
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}/${month}/${day}`;
 }
+
 
 // Call fetchData to initialize the existing chart
 fetchData();
