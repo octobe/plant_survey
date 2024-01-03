@@ -5,8 +5,10 @@ body {
 .container {
   width: 95%;
   margin: 50px;
-  font-size: 2em;
+  font-size: 1.5em;
   text-align: center;
+  /* display: grid;
+  grid-auto-columns: 45% 45%; */
 }
 
 label {
@@ -15,8 +17,8 @@ label {
 
 select {
   padding: 8px;
-  width: auto;
-  font-size: 1em;
+  width: auto; 
+  font-size: 1em; 
 }
 
 .chart {
@@ -30,7 +32,7 @@ select {
 
 button {
   margin-top: 20px;
-  padding: 10px;
-  font-size: 1em;
+  padding: 10px; 
+  font-size: 1em; 
 }
 

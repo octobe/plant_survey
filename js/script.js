@@ -1,5 +1,6 @@
 const container = document.querySelector('.container');
-let chartCount = 1;
+// let chartCount = 1;
+let chartCount = 0;
 let data;
 
 async function fetchData() {
@@ -8,17 +9,17 @@ async function fetchData() {
     const csvData = await response.text();
     data = csvToObjects(csvData);
 
-    const initialPlantSelector = document.getElementById('plantSelector');
-    initialPlantSelector.id = 'plantSelector1';
-    initialPlantSelector.addEventListener('change', () => loadData('chart1'));
-    populateDropdown(initialPlantSelector);
+    // const initialPlantSelector = document.getElementById('plantSelector');
+    // initialPlantSelector.id = 'plantSelector1';
+    // initialPlantSelector.addEventListener('change', () => loadData('chart1'));
+    // populateDropdown(initialPlantSelector);
 
-    const initialYearSelector = document.getElementById('yearSelector1');
-    initialYearSelector.addEventListener('change', () => loadData('chart1'));
-    const uniqueYears = getUniqueYears();    
-    populateYearDropdown(initialYearSelector, uniqueYears);
-
-    loadData('chart1');
+    // const initialYearSelector = document.getElementById('yearSelector1');
+    // initialYearSelector.addEventListener('change', () => loadData('chart1'));
+    // const uniqueYears = getUniqueYears();    
+    // populateYearDropdown(initialYearSelector, uniqueYears);    
+    // loadData('chart1');
+    addNewChart();
   } catch (error) {
     console.error('Error fetching data:', error);
   }
@@ -219,3 +220,4 @@ function formatDate(date) {
 
 // Call fetchData to initialize the existing chart
 fetchData();
+// addNewChart();
