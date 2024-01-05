@@ -3,12 +3,15 @@ body {
 }
 
 .container {
-  width: 95%;
-  margin: 50px;
+  /* width: 95%;
+  margin: 50px; */
   font-size: 1.5em;
+  display: grid;
+  grid-template-columns: 95%;
+  justify-content: space-evenly;
+  row-gap: 10px;
+  align-items: center;
   text-align: center;
-  /* display: grid;
-  grid-auto-columns: 45% 45%; */
 }
 
 label {
@@ -22,7 +25,7 @@ select {
 }
 
 .chart {
-  width: 80%;
+  /* width: 80%; */
   height: 400px;
 }
 
@@ -31,8 +34,14 @@ select {
 }
 
 button {
-  margin-top: 20px;
-  padding: 10px; 
+  width: auto;  
+  padding: 5pxs; 
   font-size: 1em; 
+  margin: 0 auto;
 }
 
+@media screen and (min-width: 1200px){
+  .container {
+      grid-template-columns: 45% 45%;      
+  }    
+}

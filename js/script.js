@@ -220,4 +220,3 @@ function formatDate(date) {
 
 // Call fetchData to initialize the existing chart
 fetchData();
-// addNewChart();
