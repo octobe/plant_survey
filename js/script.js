@@ -168,6 +168,8 @@ function loadData(chartId) {
           type: 'time',
           position: 'bottom',
           time: {
+            min: new Date(date.year, date.month, 1),
+            max: new Date(date.year, date.month, 31),
             unit: 'day',
             displayFormats: {
               day: 'YYYY/MM/DD',
