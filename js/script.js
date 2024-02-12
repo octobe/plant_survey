@@ -51,14 +51,7 @@ function addNewChart() {
 
   chartCount++;
 
-  loadData(`chart${newChartCount}`);
-
-  // 初始化可調整大小
-  $(`.resizable`).resizable({
-    handles: "se", // 只允許在右下角調整大小
-    minWidth: 200, // 最小寬度
-    minHeight: 200, // 最小高度
-  });
+  loadData(`chart${newChartCount}`);  
 }
 
 function createLabel(text, target) {
@@ -189,6 +182,12 @@ function loadData(chartId) {
         },
       },
     },
+  });
+  // 表格可調整大小
+  $(`.resizable`).resizable({
+    handles: "se", // 只允許在右下角調整大小
+    minWidth: 200, // 最小寬度
+    minHeight: 200, // 最小高度
   });
 }
 
