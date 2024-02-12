@@ -51,7 +51,7 @@ function addNewChart() {
 
   chartCount++;
 
-  loadData(`chart${newChartCount}`);  
+  loadData(`chart${newChartCount}`);
 }
 
 function createLabel(text, target) {
@@ -171,19 +171,39 @@ function loadData(chartId) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      scales: {            
+      scales: { 
+        x: {
+          ticks: {
+            font: {
+              weight: 'bold',
+              size: 18
+            }
+          }
+        },           
         y: {
           max: 3,
           min: 0,
           ticks: {
             stepSize: 0.5,
             autoSkip: false,
+            font: {
+              weight: 'bold',
+              size: 16
+            }
           },
         },
       },
+      plugins: {
+        legend: {
+            labels: {
+                font: {
+                    weight: 'bold' // 將圖例文字設置為粗體
+                }
+            }
+        }
+      }
     },
   });
-  // 表格可調整大小
   $(`.resizable`).resizable({
     handles: "se", // 只允許在右下角調整大小
     minWidth: 200, // 最小寬度
@@ -263,4 +283,6 @@ function toggleChartDisplay() {
   chartBlock.classList.toggle('dual-display');
 }
 
+
+// Call fetchData to initialize the existing chart
 fetchData();
