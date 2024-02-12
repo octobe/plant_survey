@@ -176,7 +176,7 @@ function loadData(chartId) {
           ticks: {
             font: {
               weight: 'bold',
-              size: 18
+              size: 14
             }
           }
         },           
@@ -188,7 +188,7 @@ function loadData(chartId) {
             autoSkip: false,
             font: {
               weight: 'bold',
-              size: 16
+              size: 14
             }
           },
         },
