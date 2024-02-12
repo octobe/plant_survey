@@ -1,10 +1,10 @@
-body {
-  font-family: Arial, sans-serif;
+body {      
+  font-family: 'Noto Sans TC', sans-serif;    
 }
 
-.container {
-  /* width: 95%;
-  margin: 50px; */
+.chartblock { 
+  position: relative;
+  top:70px; 
   font-size: 1.5em;
   display: grid;
   grid-template-columns: 95%;
@@ -24,8 +24,7 @@ select {
   font-size: 1em; 
 }
 
-.chart {
-  /* width: 80%; */
+.chart { 
   height: 400px;
 }
 
@@ -38,10 +37,19 @@ button {
   padding: 5pxs; 
   font-size: 1em; 
   margin: 0 auto;
+  font-weight: bold;
 }
 
-@media screen and (min-width: 1200px){
-  .container {
-      grid-template-columns: 45% 45%;      
-  }    
+.chartconfigure { 
+  position: relative;  
+  display: flex;
+  justify-content: space-between;    
+}
+
+.display {
+  margin-left: auto;
+}
+
+.dual-display {
+  grid-template-columns: 45% 45%;
 }
