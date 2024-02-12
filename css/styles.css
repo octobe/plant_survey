@@ -4,7 +4,7 @@ body {
 
 .chartblock { 
   position: relative;
-  font-size: 1.5em;
+  font-size: 1em;
   display: grid;
   grid-template-columns: 95%;
   justify-content: space-evenly;
@@ -18,9 +18,14 @@ label {
 }
 
 select {
-  padding: 8px;
+  padding: 2px;
   width: auto; 
-  font-size: 1em; 
+  font-size: 1em;
+  font-weight: bold;
+}
+
+option {
+  font-weight: bold;
 }
 
 .chart { 
