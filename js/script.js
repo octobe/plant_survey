@@ -1,6 +1,11 @@
-const container = document.querySelector('.container');
+const container = document.querySelector('.chartblock');
 let chartCount = 0;
 let data;
+let lineColors = {
+  '葉子分數': document.getElementById('leafColor').value,
+  '花的分數': document.getElementById('flowerColor').value,
+  '果實分數': document.getElementById('fruitColor').value,
+};
 
 async function fetchData() {
   try {
@@ -35,6 +40,7 @@ function addNewChart() {
   const newChartDiv = document.createElement('div');
   newChartDiv.id = `chartContainer${newChartCount}`;
   newChartDiv.classList.add('chart');
+  newChartDiv.classList.add('resizable'); // 添加可調整大小的類
 
   newChartContainer.appendChild(createLabel(`選擇植物：`, newPlantSelector));
   newChartContainer.appendChild(createLabel(`選擇年份：`, newYearSelector));
@@ -46,6 +52,13 @@ function addNewChart() {
   chartCount++;
 
   loadData(`chart${newChartCount}`);
+
+  // 初始化可調整大小
+  $(`.resizable`).resizable({
+    handles: "se", // 只允許在右下角調整大小
+    minWidth: 200, // 最小寬度
+    minHeight: 200, // 最小高度
+  });
 }
 
 function createLabel(text, target) {
@@ -110,16 +123,12 @@ function loadData(chartId) {
   const labels = allDates.map((date, index, array) => {
     const formattedDate = formatDate(date);
     const correspondingData = findCorrespondingData(date);
-    const xAxisLabel = `${formattedDate}\n${correspondingData.節氣}\n${correspondingData.候別}`;
-  
-    // 判斷是否滿足條件，若是則設為空字串
+    const xAxisLabel = `${formattedDate}\n${correspondingData.節氣}\n${correspondingData.候別}`;  
     if (xAxisLabel.length === 12 && index !== 0 && index !== array.length - 1) {
       return null;
-    }
-  
+    }  
     return xAxisLabel;
-  });
-  
+  });  
   
   const leafScores = new Array(allDates.length).fill(null);
   const flowerScores = new Array(allDates.length).fill(null);
@@ -145,21 +154,21 @@ function loadData(chartId) {
       datasets: [
         {
           label: '葉子分數',
-          borderColor: 'rgba(75, 192, 192, 1)',
+          borderColor: lineColors['葉子分數'],
           data: leafScores,
           fill: false,
           spanGaps: true,
         },
         {
           label: '花的分數',
-          borderColor: 'rgba(255, 99, 132, 1)',
+          borderColor: lineColors['花的分數'],
           data: flowerScores,
           fill: false,
           spanGaps: true,
         },
         {
           label: '果實分數',
-          borderColor: 'rgba(255, 205, 86, 1)',
+          borderColor: lineColors['果實分數'],
           data: fruitScores,
           fill: false,
           spanGaps: true,
@@ -169,20 +178,7 @@ function loadData(chartId) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      scales: {
-        // xAxis: [
-        //   {
-        //     type: 'time',
-        //     position: 'bottom',
-        //     time: {
-        //       unit: 'day',
-        //       displayFormats: {
-        //         day: 'YYYY/MM/DD',
-        //       },
-        //     },
-            
-        //   },
-        // ],        
+      scales: {            
         y: {
           max: 3,
           min: 0,
@@ -194,6 +190,14 @@ function loadData(chartId) {
       },
     },
   });
+}
+
+function changeLineColor(datasetLabel, color) {
+  lineColors[datasetLabel] = color;
+  // Reload all charts to apply the new color
+  for (let i = 1; i <= chartCount; i++) {
+    loadData(`chart${i}`);
+  }
 }
 
 function findCorrespondingData(date) {
@@ -255,5 +259,9 @@ function formatDate(date) {
   return `${year}/${month}/${day}`;
 }
 
-// Call fetchData to initialize the existing chart
+function toggleChartDisplay() {
+  const chartBlock = document.querySelector('.chartblock');
+  chartBlock.classList.toggle('dual-display');
+}
+
 fetchData();
