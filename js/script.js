@@ -197,6 +197,7 @@ function loadData(chartId) {
         legend: {
             labels: {
                 font: {
+                    size: 16,
                     weight: 'bold' // 將圖例文字設置為粗體
                 }
             }
