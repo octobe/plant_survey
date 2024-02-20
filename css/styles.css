@@ -57,3 +57,10 @@ button {
 .dual-display {
   grid-template-columns: 45% 45%;
 }
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;  
+}
