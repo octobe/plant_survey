@@ -7,14 +7,18 @@ let lineColors = {
   '果實分數': document.getElementById('fruitColor').value,
 };
 
-const CSV_URL = 'https://script.google.com/macros/s/AKfycbwYhoUdWdKUhKiEiv42bNCq8VGG-25W8g5TsZD5kjbLvJ8hisJad_jnLMbdbBFdVSeFhQ/exec';
+// const CSV_URL = 'https://script.google.com/macros/s/AKfycbwYhoUdWdKUhKiEiv42bNCq8VGG-25W8g5TsZD5kjbLvJ8hisJad_jnLMbdbBFdVSeFhQ/exec';
+const JSON_URL = 'https://script.google.com/macros/s/AKfycbxo1JxHY5TGj3oltURTtdHWyS3VgsZc_4LJf40HQ6RzfyEKcGIC-zggU9pxXrjSR639DA/exec';
 
 async function fetchData() {
   try {
     // const response = await fetch('大肚山植調.csv');
-    const response = await fetch(CSV_URL);
-    const csvData = await response.text();
-    data = csvToObjects(csvData);
+    // const response = await fetch(CSV_URL);
+    // const csvData = await response.text();
+    // data = csvToObjects(csvData);
+    const response = await fetch(JSON_URL);
+    const jsonData = await response.json();
+    data = jsonData;
     addNewChart();
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -232,6 +236,7 @@ function changeLineColor(datasetLabel, color) {
 //   };
 // }
 
+
 function findCorrespondingData(date) {
   // 將 date 格式化為字符串
   const dateString = date.toDateString();
@@ -266,26 +271,26 @@ function getSelectedYear(chartId) {
   return parseInt(selector.value);
 }
 
-function csvToObjects(csv) {
-  csv = csv.replace(/\r\n/g, '\n');
+// function csvToObjects(csv) {
+//   csv = csv.replace(/\r\n/g, '\n');
 
-  const lines = csv.split('\n');
-  const headers = lines[0].split(',');
-  const result = [];
+//   const lines = csv.split('\n');
+//   const headers = lines[0].split(',');
+//   const result = [];
 
-  for (let i = 1; i < lines.length; i++) {
-    const obj = {};
-    const currentLine = lines[i].split(',');
+//   for (let i = 1; i < lines.length; i++) {
+//     const obj = {};
+//     const currentLine = lines[i].split(',');
 
-    for (let j = 0; j < headers.length; j++) {
-      obj[headers[j]] = currentLine[j];
-    }
+//     for (let j = 0; j < headers.length; j++) {
+//       obj[headers[j]] = currentLine[j];
+//     }
 
-    result.push(obj);
-  }
+//     result.push(obj);
+//   }
 
-  return result;
-}
+//   return result;
+// }
 
 function formatDate(date) {
   const year = date.getFullYear();
