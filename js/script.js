@@ -7,9 +7,12 @@ let lineColors = {
   '果實分數': document.getElementById('fruitColor').value,
 };
 
+const CSV_URL = 'https://script.google.com/macros/s/AKfycbwYhoUdWdKUhKiEiv42bNCq8VGG-25W8g5TsZD5kjbLvJ8hisJad_jnLMbdbBFdVSeFhQ/exec';
+
 async function fetchData() {
   try {
-    const response = await fetch('大肚山植調.csv');
+    // const response = await fetch('大肚山植調.csv');
+    const response = await fetch(CSV_URL);
     const csvData = await response.text();
     data = csvToObjects(csvData);
     addNewChart();
@@ -121,8 +124,8 @@ function loadData(chartId) {
       return null;
     }  
     return xAxisLabel;
-  });  
-  
+  }); 
+
   const leafScores = new Array(allDates.length).fill(null);
   const flowerScores = new Array(allDates.length).fill(null);
   const fruitScores = new Array(allDates.length).fill(null);
@@ -220,9 +223,21 @@ function changeLineColor(datasetLabel, color) {
   }
 }
 
+// function findCorrespondingData(date) {
+//   const dateString = formatDate(date);
+//   const correspondingData = data.find(item => item['日期'] === dateString) || { 節氣: '', 候別: '' };
+//   return {
+//     節氣: correspondingData['節氣'],
+//     候別: correspondingData['候別'],
+//   };
+// }
+
 function findCorrespondingData(date) {
-  const dateString = formatDate(date);
-  const correspondingData = data.find(item => item['日期'] === dateString) || { 節氣: '', 候別: '' };
+  // 將 date 格式化為字符串
+  const dateString = date.toDateString();
+  const correspondingData = data.find(item => new Date(item['日期']).toDateString() === dateString) || { 節氣: '', 候別: '' };
+  console.log('Date:', dateString);
+  console.log('Corresponding Data:', correspondingData);
   return {
     節氣: correspondingData['節氣'],
     候別: correspondingData['候別'],
