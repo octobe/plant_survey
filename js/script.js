@@ -11,6 +11,9 @@ const JSON_URL = 'https://script.google.com/macros/s/AKfycbxBn52Yp7zXOpR90bFEUWb
 
 // 確保僅呼叫 fetchData 一次
 async function fetchData() {
+  const loadingIndicator = document.getElementById('loadingIndicator');
+  loadingIndicator.style.display = 'block'; // 顯示加載指示器
+
   try {
     const response = await fetch(JSON_URL);
     data = await response.json();
@@ -18,8 +21,11 @@ async function fetchData() {
     addNewChart();
   } catch (error) {
     console.error('Error fetching data:', error);
+  } finally {
+    loadingIndicator.style.display = 'none'; // 隱藏加載指示器
   }
 }
+
 
 // 儲存已計算的唯一年份以避免重複計算
 let uniqueYearsCache;
