@@ -70,13 +70,11 @@ footer {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 10vw; /* 寬度設定為視窗寬度的十分之一 */
-  height: 10vw; /* 高度與寬度保持一致，確保是正圓 */
-  margin-top: -5vw; /* 垂直居中 */
-  margin-left: -5vw; /* 水平居中 */
-  border: 15px solid #f3f3f3; /* 淺灰色邊框 */
+  width: 50px;
+  height: 50px;
+  border: 6px solid #f3f3f3; /* 淺灰色邊框 */
   border-radius: 50%;
-  border-top: 10px solid #3498db; /* 藍色邊框，增加粗度 */
+  border-top: 6px solid #3498db; /* 藍色邊框 */
   animation: spin 1s linear infinite; /* 旋轉動畫 */
   z-index: 9999; /* 確保位於最上層 */
 }
