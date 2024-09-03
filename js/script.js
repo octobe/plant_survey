@@ -419,16 +419,17 @@ function addNewChart() {
   newRegionSelector.id = `regionSelector${newChartCount}`;
   newRegionSelector.addEventListener('change', () => loadData(newChartCount));
   populateRegionDropdown(newRegionSelector);
-
+  
   const newPlantSelector = document.createElement('select');
   newPlantSelector.id = `plantSelector${newChartCount}`;
   newPlantSelector.addEventListener('change', () => loadData(newChartCount));
   populateDropdown(newPlantSelector);
-
+  
   const newYearSelector = document.createElement('select');
   newYearSelector.id = `yearSelector${newChartCount}`;
   newYearSelector.addEventListener('change', () => loadData(newChartCount));
   populateYearDropdown(newYearSelector, getUniqueYears());
+  
 
   const newResultDiv = document.createElement('div');
   newResultDiv.id = `result${newChartCount}`;
@@ -466,17 +467,67 @@ function populateYearDropdown(selector, years) {
   });
 }
 
+function updatePlantDropdown(chartNumber, filteredData) {
+  const plantSelector = document.getElementById(`plantSelector${chartNumber}`);
+  const selectedPlantNumber = plantSelector.value; // 保留當前選擇的植物編號
+  plantSelector.innerHTML = ''; // 清空現有選項
+
+  const uniquePlantNumbers = new Set();
+  const options = [];
+
+  filteredData.forEach(item => {
+    const plantNumber = item['植物編號'];
+    const plantName = item['植物名稱'];
+
+    if (plantNumber && plantName && !uniquePlantNumbers.has(plantNumber)) {
+      uniquePlantNumbers.add(plantNumber);
+
+      const option = document.createElement('option');
+      option.value = plantNumber;
+      option.text = `${plantNumber} - ${plantName}`;
+      options.push(option);
+    }
+  });
+
+  options.forEach(option => plantSelector.appendChild(option));
+  plantSelector.value = selectedPlantNumber; // 恢復選擇的植物編號
+}
+
+function updateYearDropdown(chartNumber, filteredData) {
+  const yearSelector = document.getElementById(`yearSelector${chartNumber}`);
+  const selectedYear = yearSelector.value; // 保留當前選擇的年份
+  yearSelector.innerHTML = ''; // 清空現有選項
+
+  const uniqueYears = new Set();
+  filteredData.forEach(item => {
+    const date = new Date(item['日期']);
+    if (!isNaN(date.getFullYear())) {
+      uniqueYears.add(date.getFullYear());
+    }
+  });
+
+  uniqueYears.forEach(year => {
+    const option = document.createElement('option');
+    option.value = year;
+    option.text = year.toString();
+    yearSelector.appendChild(option);
+  });
+  yearSelector.value = selectedYear; // 恢復選擇的年份
+}
+
+
+
 function loadData(chartNumber) {
   const selectedPlantNumber = getSelectedPlantNumber(chartNumber);
   const selectedYear = getSelectedYear(chartNumber);
-  const selectedRegion = getSelectedRegion(chartNumber); // 獲取所選地區
+  const selectedRegion = getSelectedRegion(chartNumber);
 
   // 篩選出所選地區的資料
   const filteredByRegion = data.filter(item => item['地區'] === selectedRegion);
 
   // 更新「選擇植物」選項
   updatePlantDropdown(chartNumber, filteredByRegion);
-  
+
   // 更新「選擇年份」選項
   updateYearDropdown(chartNumber, filteredByRegion);
 
@@ -492,6 +543,7 @@ function loadData(chartNumber) {
   const endDate = new Date(updatedSelectedYear, 11, 31);
   const allDates = getDates(startDate, endDate);
 
+  // 清空圖表容器
   const chartContainer = document.getElementById(`chartContainer${chartNumber}`);
   chartContainer.innerHTML = '';
 
@@ -598,52 +650,6 @@ function loadData(chartNumber) {
     });
   }
 }
-
-function updatePlantDropdown(chartNumber, filteredData) {
-  const plantSelector = document.getElementById(`plantSelector${chartNumber}`);
-  plantSelector.innerHTML = ''; // 清空現有選項
-
-  const uniquePlantNumbers = new Set();
-  const options = [];
-  
-  filteredData.forEach(item => {
-    const plantNumber = item['植物編號'];
-    const plantName = item['植物名稱'];
-
-    if (plantNumber && plantName && !uniquePlantNumbers.has(plantNumber)) {
-      uniquePlantNumbers.add(plantNumber);
-
-      const option = document.createElement('option');
-      option.value = plantNumber;
-      option.text = `${plantNumber} - ${plantName}`;
-      options.push(option);
-    }
-  });
-
-  options.forEach(option => plantSelector.appendChild(option));
-}
-
-function updateYearDropdown(chartNumber, filteredData) {
-  const yearSelector = document.getElementById(`yearSelector${chartNumber}`);
-  yearSelector.innerHTML = ''; // 清空現有選項
-
-  const uniqueYears = new Set();
-  filteredData.forEach(item => {
-    const date = new Date(item['日期']);
-    if (!isNaN(date.getFullYear())) {
-      uniqueYears.add(date.getFullYear());
-    }
-  });
-
-  uniqueYears.forEach(year => {
-    const option = document.createElement('option');
-    option.value = year;
-    option.text = year.toString();
-    yearSelector.appendChild(option);
-  });
-}
-
-
 
 function changeLineColor(datasetLabel, color) {
   lineColors[datasetLabel] = color;
