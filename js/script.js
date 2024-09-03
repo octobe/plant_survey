@@ -614,7 +614,13 @@ function loadData(chartNumber) {
             font: {
               weight: 'bold',
               size: 14
-            }
+            },            
+            // 設定標籤的旋轉角度
+            autoSkip: true,
+            maxRotation: 90, // 標籤最大旋轉角度
+            minRotation: 45, // 標籤最小旋轉角度
+            // 設定標籤對齊方式
+            align: 'center' // 可選值: 'start', 'center', 'end'
           }
         },           
         y: {
