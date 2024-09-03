@@ -522,36 +522,38 @@ function loadData(chartNumber) {
   const selectedYear = getSelectedYear(chartNumber);
   const selectedRegion = getSelectedRegion(chartNumber);
 
-  // 篩選出所選地區的資料
+  // 过滤出所选地区的数据
   const filteredByRegion = data.filter(item => item['地區'] === selectedRegion);
 
-  // 更新「選擇植物」選項
+  // 更新“选择植物”选项
   updatePlantDropdown(chartNumber, filteredByRegion);
 
-  // 更新「選擇年份」選項
+  // 更新“选择年份”选项
   updateYearDropdown(chartNumber, filteredByRegion);
 
-  // 重新獲取更新後的選擇
+  // 重新获取更新后的选择
   const updatedSelectedPlantNumber = getSelectedPlantNumber(chartNumber);
   const updatedSelectedYear = getSelectedYear(chartNumber);
 
-  // 篩選出所選植物的資料
+  // 过滤出所选植物的数据
   const filteredByPlant = filteredByRegion.filter(item => item['植物編號'] === updatedSelectedPlantNumber);
 
-  // 根據所選年份進行進一步的篩選
+  // 根据所选年份进一步过滤数据
   const startDate = new Date(updatedSelectedYear, 0, 1);
   const endDate = new Date(updatedSelectedYear, 11, 31);
   const allDates = getDates(startDate, endDate);
 
-  // 清空圖表容器
+  // 清空图表容器
   const chartContainer = document.getElementById(`chartContainer${chartNumber}`);
   chartContainer.innerHTML = '';
 
-  // 使用映射表提高數據查找速度
+  // 使用映射表提高数据查找速度
   const dateMap = new Map(allDates.map(date => [date.toDateString(), date]));
+
+  // 更新 `findCorrespondingData` 函数以接受 `filteredByPlant` 数据作为参数
   const labels = allDates.map(date => {
     const formattedDate = formatDate(date);
-    const correspondingData = findCorrespondingData(date);
+    const correspondingData = findCorrespondingData(date, filteredByPlant); // 修改这里
     const xAxisLabel = `${formattedDate}\n${correspondingData.節氣}\n${correspondingData.候別}`;
     return (xAxisLabel.length === 12) ? null : xAxisLabel;
   });
@@ -641,7 +643,7 @@ function loadData(chartNumber) {
     },
   });
 
-  // 優化 resizable 初始化
+  // 优化 resizable 初始化
   if ($('.resizable').length) {
     $('.resizable').resizable({
       handles: "se", 
@@ -650,6 +652,7 @@ function loadData(chartNumber) {
     });
   }
 }
+
 
 function changeLineColor(datasetLabel, color) {
   lineColors[datasetLabel] = color;
@@ -661,14 +664,15 @@ function changeLineColor(datasetLabel, color) {
   }
 }
 
-function findCorrespondingData(date) {
+function findCorrespondingData(date, filteredData) {
   const dateString = date.toDateString();
-  const correspondingData = data.find(item => new Date(item['日期']).toDateString() === dateString) || { 節氣: '', 候別: '' };
+  const correspondingData = filteredData.find(item => new Date(item['日期']).toDateString() === dateString) || { 節氣: '', 候別: '' };
   return {
     節氣: correspondingData['節氣'],
     候別: correspondingData['候別'],
   };
 }
+
 
 function getDates(startDate, endDate) {
   const dates = [];
