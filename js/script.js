@@ -555,7 +555,7 @@ function loadData(chartNumber) {
     const formattedDate = formatDate(date);
     const correspondingData = findCorrespondingData(date, filteredByPlant); // 修改这里
     const xAxisLabel = `${formattedDate}\n${correspondingData.節氣}\n${correspondingData.候別}`;
-    return (xAxisLabel.length === 12) ? null : xAxisLabel;
+    return (xAxisLabel.length === 7) ? null : xAxisLabel;
   });
 
   const leafScores = new Array(allDates.length).fill(null);
@@ -670,12 +670,17 @@ function changeLineColor(datasetLabel, color) {
   }
 }
 
+// 更新 findCorrespondingData 函數，使候別僅顯示數字
 function findCorrespondingData(date, filteredData) {
   const dateString = date.toDateString();
   const correspondingData = filteredData.find(item => new Date(item['日期']).toDateString() === dateString) || { 節氣: '', 候別: '' };
+  
+  // 將候別中的「第一候」「第二候」「第三候」縮短為「1」「2」「3」
+  const 候別數字 = correspondingData['候別'].replace('第1候', '1').replace('第2候', '2').replace('第3候', '3');
+  
   return {
     節氣: correspondingData['節氣'],
-    候別: correspondingData['候別'],
+    候別: 候別數字,
   };
 }
 
@@ -711,8 +716,10 @@ function formatDate(date) {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
-  return `${year}/${month}/${day}`;
+  // return `${year}/${month}/${day}`;
+  return `${month}/${day}`;
 }
+
 
 function toggleChartDisplay() {
   const chartBlock = document.querySelector('.chartblock');
