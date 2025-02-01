@@ -317,7 +317,9 @@ let lineColors = {
 const URLs = {
   '大肚山': 'https://script.google.com/macros/s/AKfycbxBn52Yp7zXOpR90bFEUWbG7hFdxgG13VqihU1GLPdbJji8t4YGjM7oB_LZB9-tSMaDuQ/exec',
   '大坑': 'https://script.google.com/macros/s/AKfycbwEo_uKmt_F7b3fgRIgBxWcS8sAe-Z3xV3YFT1wOX2190okGDw75cQ5gtQ9nqc6YaQ/exec',
-  '石牌親水步道': 'https://script.google.com/macros/s/AKfycbwhahiVqelC01jjKXEueu3JvbNBZUaF7VlBxsDWi1ekzCciYwbAtLwJkq-ny_aWJV85Zw/exec'
+  '石牌親水步道': 'https://script.google.com/macros/s/AKfycbwhahiVqelC01jjKXEueu3JvbNBZUaF7VlBxsDWi1ekzCciYwbAtLwJkq-ny_aWJV85Zw/exec',
+  '北坑溪步道':'https://script.google.com/macros/s/AKfycbzMU3qALcjJ5frfVv2M--aXkFOTP2sgROxjciESIoZaF7YI18N_UclRBeaYYJCCfyqh/exec',
+  '臺中都會公園':'https://script.google.com/macros/s/AKfycby_7K5bHYYzYMlF8FOC_NVIsFIx84EfAwYFX6ls4Habdy0LDoHYx67E6EIi6UyDej8lzA/exec'
 };
 
 async function fetchAndCombineData() {
