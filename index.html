@@ -22,7 +22,17 @@
       </div>
       <div class="config line">
         <label for="fruitColor">選擇果實分數顏色：</label>
-        <input type="color" id="fruitColor" onchange="changeLineColor('果實分數', this.value)" value= "#FFCD56">
+        <input type="color" id="fruitColor" onchange="changeLineColor('果實分數', this.value)" value="#FFCD56">
+        
+        <label for="locationSelect">顯示原始資料：</label>
+        <select id="locationSelect">
+          <option value="https://docs.google.com/spreadsheets/d/1W8LIjC_hC0ftYnQd68ruLf9foKQP0JYLSKtXK-YESfA/edit?usp=sharing">大肚山</option>
+          <option value="https://docs.google.com/spreadsheets/d/1kpSe_iaBouMAwpO30QcsDAtdNMn8u1mS7uofF_0BDnE/edit?usp=sharing">大坑</option>
+          <option value="https://docs.google.com/spreadsheets/d/1nDBthPxh0kDAgp_Gq1XqJ6PN_FkD3mmljzhrtIdsoh0/edit?usp=sharing">石牌坑</option>
+          <option value="https://docs.google.com/spreadsheets/d/1yMhjc542jERUFSyMCbmWbyQ4WQZZIprsZkH37NK27tU/edit?usp=sharing">北坑溪</option>
+          <option value="https://docs.google.com/spreadsheets/d/1Vx7i_go75lECANzwx5IdiM6wSGqfyia6WCABUxZ5C8g/edit?usp=sharing">臺中都會公園</option>
+        </select>
+        <button onclick="goToLink()">前往</button>
       </div>
       <div class="config display">
         <button onclick="toggleChartDisplay()">併排顯示</button>
@@ -36,5 +46,11 @@
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/script.js"></script>
+  <script>
+    function goToLink() {
+      var selectedLink = document.getElementById("locationSelect").value;
+      window.open(selectedLink, "_blank");
+    }
+  </script>
 </body>
 </html>
