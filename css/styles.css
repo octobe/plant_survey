@@ -84,4 +84,9 @@ footer {
   100% { transform: rotate(360deg); }
 }
 
+.config.line {
+  margin: 0 10px; /* 左右10px 間距，上下保持不變 */
+}
+
+
 
